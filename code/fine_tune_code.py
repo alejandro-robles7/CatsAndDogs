@@ -7,11 +7,16 @@ from keras import optimizers
 from keras.models import Sequential, Model
 from keras.layers import Dropout, Flatten, Dense, Input
 
+# USER INPUT
+NUM_LAYERS = None
+
 # dimensions of our images.
 img_width, img_height = 150, 150
 
-train_data_dir = 'cats_and_dogs_medium/train'      # Path to training images
-validation_data_dir = 'cats_and_dogs_medium/test'  # Validation and test set are the same here
+local_path = '/Users/alexballack13/PycharmProjects/CatsAndDogs/data/{}'
+
+train_data_dir = local_path.format('cats_and_dogs_medium/train')      # Path to training images
+validation_data_dir = local_path.format('cats_and_dogs_medium/test')  # Validation and test set are the same here
 nb_train_samples = 30000
 nb_validation_samples = 900
 epochs = 2

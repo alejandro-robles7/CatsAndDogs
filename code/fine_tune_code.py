@@ -6,20 +6,25 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras import optimizers
 from keras.models import Sequential, Model
 from keras.layers import Dropout, Flatten, Dense, Input
+from os import environ
+
+# Needed to run model
+environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 # USER INPUT
+# NUM_LAYERS should be 25 given summary
 NUM_LAYERS = None
 
 # dimensions of our images.
 img_width, img_height = 150, 150
 
-local_path = '/Users/alexballack13/PycharmProjects/CatsAndDogs/data/{}'
+local_path = '/Users/alejandro.robles/PycharmProjects/CatsAndDogs/data/{}'
 
 train_data_dir = local_path.format('cats_and_dogs_medium/train')      # Path to training images
 validation_data_dir = local_path.format('cats_and_dogs_medium/test')  # Validation and test set are the same here
-nb_train_samples = 30000
-nb_validation_samples = 900
-epochs = 2
+nb_train_samples = 30000 / 20
+nb_validation_samples = 900 /20
+epochs = 2 / 2
 batch_size = 16
 
 # Build the VGG16 network
@@ -30,6 +35,8 @@ top_model = Sequential()
 top_model.add(Flatten(input_shape=base_model.output_shape[1:]))
 top_model.add(Dense(1, activation='sigmoid'))
 model = Model(input= base_model.input, output= top_model(base_model.output))
+
+NUM_LAYERS = len(base_model.trainable_weights) - 1
 
 # Freeze all the layers in the original model (fine-tune only the added Dense layers)
 for layer in model.layers[:NUM_LAYERS]:       # You need to figure out how many layers were in the base model to freeze

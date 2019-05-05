@@ -18,6 +18,7 @@ NUM_LAYERS = None
 # dimensions of our images.
 img_width, img_height = 150, 150
 
+
 local_path = '/Users/alejandro.robles/PycharmProjects/CatsAndDogs/data/{}'
 
 train_data_dir = local_path.format('cats_and_dogs_medium/train')      # Path to training images
@@ -27,7 +28,7 @@ validation_data_dir = local_path.format('cats_and_dogs_medium/test')  # Validati
 # epochs = 2 / 2
 nb_train_samples = 30000
 nb_validation_samples = 900
-epochs = 2
+epochs = 1
 batch_size = 16
 
 # Build the VGG16 network
@@ -40,7 +41,7 @@ top_model.add(Flatten(input_shape=base_model.output_shape[1:]))
 top_model.add(Dense(1, activation='sigmoid'))
 model = Model(input= base_model.input, output= top_model(base_model.output))
 
-NUM_LAYERS = len(base_model.trainable_weights) - 1
+NUM_LAYERS = 19 #len(base_model.trainable_weights) - 1
 
 # Freeze all the layers in the original model (fine-tune only the added Dense layers)
 for layer in model.layers[:NUM_LAYERS]:       # You need to figure out how many layers were in the base model to freeze
@@ -75,10 +76,10 @@ validation_generator = test_datagen.flow_from_directory(
 # Fine-tune the model
 model.fit_generator(
     train_generator,
-    samples_per_epoch=nb_train_samples//batch_size,
-    nb_epoch=epochs,				            # For Keras 2.0 API change to epochs=epochs,
+    steps_per_epoch=nb_train_samples//batch_size,
+    epochs=epochs,				            # For Keras 2.0 API change to epochs=epochs,
     validation_data=validation_generator,
-    nb_val_samples=nb_validation_samples//batch_size)       # For Keras 2.0 API change to validation_steps=nb_validation_samples
+    validation_steps=56)       # For Keras 2.0 API change to validation_steps=nb_validation_samples
 
 
 model_path = 'model_keras_full_2_epochs.h5'

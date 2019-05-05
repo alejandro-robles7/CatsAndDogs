@@ -15,7 +15,16 @@ Epoch 1/1
 3/5 [=================>............] - ETA: 4s - loss: 0.9934 - acc: 0.5000
 
 4/5 [=======================>......] - ETA: 2s - loss: 0.9992 - acc: 0.5156
+
 5/5 [==============================] - 15s 3s/step - loss: 0.9960 - acc: 0.5125 - val_loss: 0.7363 - val_acc: 0.6562
+
+
+We get an accuracy of 0.6562 for validation set. This is pretty good for a small dataset. 
+The reason we get a good result is because we are using transfer learning which means we are taking 
+advantage of a pre-trained model that has been trained on a very large dataset. The intuition is that
+this model has already learnt basic shape and structures of animals so we only need to train higher level 
+features. 
+
 
 ## Question 2: 
 

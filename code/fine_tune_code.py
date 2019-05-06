@@ -12,8 +12,8 @@ from os import environ
 environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 # USER INPUT
-# NUM_LAYERS should be 25 given summary
-NUM_LAYERS = None
+# NUM_LAYERS should be 19 given summary
+NUM_LAYERS = 19
 
 # dimensions of our images.
 img_width, img_height = 150, 150
@@ -23,9 +23,12 @@ local_path = '/Users/alejandro.robles/PycharmProjects/CatsAndDogs/data/{}'
 
 train_data_dir = local_path.format('cats_and_dogs_medium/train')      # Path to training images
 validation_data_dir = local_path.format('cats_and_dogs_medium/test')  # Validation and test set are the same here
+
+# This is using a smaller training set for fast prototyping
 # nb_train_samples = 30000 / 20
 # nb_validation_samples = 900 /20
 # epochs = 2 / 2
+
 nb_train_samples = 30000
 nb_validation_samples = 900
 epochs = 1
@@ -40,8 +43,6 @@ top_model.add(Flatten(input_shape=base_model.output_shape[1:]))
 #top_model.add(Dropout(0.5))
 top_model.add(Dense(1, activation='sigmoid'))
 model = Model(input= base_model.input, output= top_model(base_model.output))
-
-NUM_LAYERS = 19 #len(base_model.trainable_weights) - 1
 
 # Freeze all the layers in the original model (fine-tune only the added Dense layers)
 for layer in model.layers[:NUM_LAYERS]:       # You need to figure out how many layers were in the base model to freeze
@@ -82,11 +83,13 @@ model.fit_generator(
     validation_steps=56)       # For Keras 2.0 API change to validation_steps=nb_validation_samples
 
 
-model_path = 'model_keras_full_2_epochs.h5'
-model_weights_path = 'model_weights_full_2_epochs.h5'
+# Saving Weights
+model_path = 'model_keras.h5'
+model_weights_path = 'model_weights.h5'
 model.save(model_path)
 model.save_weights(model_weights_path)
 
+# Loading back to check
 model2 = load_model(model_path)
 model2.load_weights(model_weights_path)
 
